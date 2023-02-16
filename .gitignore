@@ -133,5 +133,5 @@ dmypy.json
 
 # Confidencial
 ESP_BME280_OLED/config.h
-settings.py
+src/meteo_bot/access_config.py
 
