@@ -33,6 +33,10 @@ def get_weather_data():
         return data_list
 
 
+def weather_sensitivity():
+    pass
+
+
 if __name__ == '__main__':
     for data in get_weather_data():
         print(data)
