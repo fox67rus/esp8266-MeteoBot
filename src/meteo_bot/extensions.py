@@ -1,6 +1,7 @@
 import requests
 import lxml.html
 from src.meteo_bot.access_config import ip
+from exceptions import ConnectionException
 
 
 def prepare_text_to_print(incoming_list):
@@ -19,8 +20,8 @@ def prepare_text_to_print(incoming_list):
 def get_weather_data():
     try:
         html = requests.get(ip).content
-    except Exception as error:
-        print('Ошибка подключения к датчику.', error)
+    except Exception:
+        raise ConnectionException('Ошибка подключения к датчику.')
     else:
         tree = lxml.html.document_fromstring(html)
         temp = prepare_text_to_print(tree.xpath('//*[@id="temp"]/text()'))
