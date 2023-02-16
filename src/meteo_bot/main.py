@@ -1,4 +1,5 @@
 import telebot
+from telebot import types
 
 from src.meteo_bot.access_config import TOKEN
 from extensions import get_weather_data
@@ -9,15 +10,21 @@ bot = telebot.TeleBot(TOKEN)
 # Обработка команд
 @bot.message_handler(commands=['start'])
 def command_start(message: telebot.types.Message):
-    text = f'Добрейшего времени суток вам, {message.chat.first_name}!\n' \
+    text = f'Добрейшего времени суток вам, {message.chat.first_name}!\n\n' \
            f'Введите команду /temp для вывода погоды.\n'
     bot.send_message(message.chat.id, text)
+
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    btn1 = types.KeyboardButton('🌡️ Данные с датчика')
+    btn2 = types.KeyboardButton('🌐 Данные из Интернета')
+    markup.add(btn1, btn2)
+    bot.send_message(message.from_user.id, "🌡️ Данные с датчика / 🌐 Данные из Интернета", reply_markup=markup)
 
 
 @bot.message_handler(commands=['help'])
 def command_help(message: telebot.types.Message):
     text = f'Список доступных команд:\n' \
-           f'Введите команду /temp для вывода погоды.\n'
+           f'Введите команду /temp для вывода данных с датчика.\n'
     bot.send_message(message.chat.id, text)
 
 
@@ -36,9 +43,15 @@ def command_temp(message: telebot.types.Message):
 
 
 @bot.message_handler(content_types=['text', ])
-def repeat_text(message: telebot.types.Message):
-    text = 'Введите /help для вывода доступных команд'
-    bot.reply_to(message, text)
+def text_message(message: telebot.types.Message):
+    if message.text == '🌡️ Данные с датчика':
+        pass
+    elif message.text == '🌐 Данные из Интернета':
+        bot.send_message(message.from_user.id, 'Подробная погода по ' +
+                         '[ссылке](https://m.meteonova.ru/med/20429-pogoda-Karmanovo.htm)', parse_mode='Markdown')
+
+    else:
+        bot.send_message(message.from_user.id, '\nВведите /help для вывода доступных команд')
 
 
 try:
