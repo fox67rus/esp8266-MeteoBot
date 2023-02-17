@@ -35,6 +35,18 @@ def get_weather_data():
         return data_list
 
 
+def prepare_message():
+    weather_data = get_weather_data()
+    if weather_data:
+        temperature = weather_data[0]
+        humidity = weather_data[1]
+        pressure = weather_data[2]
+        text = f'Температура: {temperature} °C.\n' \
+               f'Влажность: {humidity} %.\n' \
+               f'Давление: {pressure} мм рт. ст.\n'
+        return text
+
+
 def get_weather_sensitivity():
     url = 'https://www.meteonova.ru/med/20429.htm'
     try:

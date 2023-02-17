@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 
 from src.meteo_bot.access_config import TOKEN
-from extensions import get_weather_data, get_weather_sensitivity
+from extensions import prepare_message, get_weather_sensitivity
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -10,17 +10,17 @@ bot = telebot.TeleBot(TOKEN)
 # Обработка команд
 @bot.message_handler(commands=['start'])
 def command_start(message: telebot.types.Message):
-    text = f'Добрейшего времени суток вам, {message.chat.first_name}!\n\n' \
-           f'Введите команду /temp для вывода погоды.\n'
+    text = f'Добрейшего времени суток вам, {message.chat.first_name}!\n\n'
     bot.send_message(message.chat.id, text)
 
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     btn1 = types.KeyboardButton('🌡️ Данные с датчика')
     btn2 = types.KeyboardButton('😵 Медицинский прогноз')
-    # btn3 = types.KeyboardButton('🌐 Данные из Интернета')
+    btn3 = types.KeyboardButton('🌐 Данные из Интернета')
 
-    markup.add(btn1, btn2)
-    # bot.send_message(message.from_user.id, "🌡️ Данные с датчика / 🌐 Данные из Интернета", reply_markup=markup)
+    markup.add(btn1, btn2, btn3)
+    bot.send_message(message.from_user.id, 'Выберете необходимое действие или отправьте команду /help',
+                     reply_markup=markup)
 
 
 @bot.message_handler(commands=['help'])
@@ -33,23 +33,18 @@ def command_help(message: telebot.types.Message):
 @bot.message_handler(commands=['temp'])
 def command_temp(message: telebot.types.Message):
     bot.send_message(message.chat.id, 'Получаем данные с датчика...')
-    weather_data = get_weather_data()
-    if weather_data:
-        temperature = weather_data[0]
-        humidity = weather_data[1]
-        pressure = weather_data[2]
-        text = f'Температура: {temperature} °C.\n' \
-               f'Влажность: {humidity} %.\n' \
-               f'Давление: {pressure} мм рт. ст.\n'
-        bot.send_message(message.chat.id, text)
+    text = prepare_message()
+    bot.send_message(message.chat.id, text)
 
 
 @bot.message_handler(content_types=['text', ])
 def text_message(message: telebot.types.Message):
     if message.text == '🌡️ Данные с датчика':
-        pass
+        bot.send_message(message.chat.id, 'Получаем данные с датчика...')
+        text = prepare_message()
+        bot.send_message(message.chat.id, text)
+
     elif message.text == '😵 Медицинский прогноз':
-        bot.send_message(message.chat.id, 'Отправляю запрос на сервер...')
         weather_health_data = get_weather_sensitivity()
         if weather_health_data:
             weather_heart_now = weather_health_data[0]
@@ -59,10 +54,12 @@ def text_message(message: telebot.types.Message):
 
             text = f'Сейчас:\n{weather_heart_now}. \n' \
                    f'{weather_magnet_now}\n\n' \
-                   f'Ожидается:\n{weather_heart_soon} \n' \
+                   f'Ожидается в ближайшие 6 часов:\n{weather_heart_soon} \n' \
                    f'{weather_magnet_soon}'
+        else:
+            text = 'Не удалось получить данные'
 
-            bot.send_message(message.from_user.id, text, parse_mode='Markdown')
+        bot.send_message(message.from_user.id, text, parse_mode='Markdown')
 
     elif message.text == '🌐 Данные из Интернета':
         bot.send_message(message.from_user.id, 'Подробная погода по ' +
