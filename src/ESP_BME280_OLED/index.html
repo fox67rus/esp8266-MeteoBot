@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset='UTF-8'>
+  <link rel="icon" href="data:,">
+  <style>
+      body {
+      text-align: center;
+      font-family: "Trebuchet MS", Arial, serif;
+  }
+      table {
+          border-collapse: collapse;
+          width: 40%;
+          margin-left: auto;
+          margin-right: auto;
+      }
+      th {
+          padding: 12px;
+          background-color: #35d4c7;
+          color: white;
+      }
+      tr {
+          border: 1px solid #ddd;
+          padding: 12px;
+      }
+      tr:hover {
+          background-color: #8ad9d2;
+      }
+      td {
+          border: none;
+          padding: 12px;
+      }
+      .sensor {
+          font-weight: bold; /* color:white; background-color: #bcbcbc;*/
+          padding: 1px;
+      }
+  </style>
+  <title>Метеостанция на BME280 и ESP8266</title>
+</head>
+
+<body>
+<h1>Метеостанция на BME280 и ESP8266</h1>
+
+<table>
+  <tr>
+    <th>Параметр</th>
+    <th>Показания</th>
+  </tr>
+  <tr>
+    <td>Температура</td>
+    <td>
+      <span id="temp" class="sensor"> 21.1 °</span>
+    </td>
+  </tr>
+  <tr>
+    <td>Давление</td>
+    <td><span id="press" class="sensor">750 мм рт. ст.</span>
+    </td>
+  </tr>
+  <tr>
+    <td>Влажность</td>
+    <td><span id="humi" class="sensor">38 %</span></td>
+  </tr>
+</table>
+
+</body>
+</html>
