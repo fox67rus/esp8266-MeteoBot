@@ -1,5 +1,7 @@
 import requests
 import lxml.html
+from bs4 import BeautifulSoup
+
 from src.meteo_bot.access_config import ip
 from exceptions import ConnectionException
 
@@ -33,10 +35,25 @@ def get_weather_data():
         return data_list
 
 
-def weather_sensitivity():
-    pass
+def get_weather_sensitivity():
+    url = 'https://www.meteonova.ru/med/20429.htm'
+    try:
+        page = requests.get(url).content
+    except Exception:
+        raise ConnectionException('Ошибка получения данных с сайта')
+    else:
+        health_status = []
+        soup = BeautifulSoup(page, 'lxml')
+        img_css = soup.select('tr.display > td.temper > img', limit=4)
+        print(len(img_css))
+        for img in img_css:
+            health_status.append(img.get('title'))
+        print(health_status)
+        return health_status
 
 
 if __name__ == '__main__':
     for data in get_weather_data():
         print(data)
+
+    get_weather_sensitivity()
