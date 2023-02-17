@@ -175,7 +175,7 @@ String SendHTML(float temperature,float humidity,float pressure,float altitude)
   ptr +="s2.257,1.01,2.257,2.257V39.73C13.934,40.597,15.302,42.554,15.302,44.833z'fill=#F29C21 /></g></svg>";
   ptr +="</div>";
   ptr +="<div class='side-by-side text'>Температура: </div>";
-  ptr +="<div class='side-by-side reading'>";
+  ptr +="<div id='temp' class='side-by-side reading'>";
   ptr +=String(temperature);
   ptr +="<span class='superscript'>&deg;C</span></div>";
   ptr +="</div>";
@@ -188,7 +188,7 @@ String SendHTML(float temperature,float humidity,float pressure,float altitude)
   ptr +="C15.093,36.497,14.455,37.135,13.667,37.135z'fill=#3C97D3 /></svg>";
   ptr +="</div>";
   ptr +="<div class='side-by-side text'>Влажность: </div>";
-  ptr +="<div class='side-by-side reading'>";
+  ptr +="<div id='humi' class='side-by-side reading'>";
   ptr +=(int)humidity;
   ptr +="<span class='superscript'>%</span></div>";
   ptr +="</div>";
@@ -206,28 +206,10 @@ String SendHTML(float temperature,float humidity,float pressure,float altitude)
   ptr +="C23.196,19.843,23.464,20.973,23.084,22.037z'fill=#26B999 /></g></svg>";
   ptr +="</div>";  
   ptr +="<div class='side-by-side text'>Давление: </div>";
-  ptr +="<div class='side-by-side reading'>";
+  ptr +="<div id='press' class='side-by-side reading'>";
   ptr +=(int)pressure;
   ptr +="<span class='superscript'>mmHg</span></div>";
   ptr +="</div>";
-
-/*  
-  ptr +="<div class='data altitude'>";
-  ptr +="<div class='side-by-side icon'>";
-  ptr +="<svg enable-background='new 0 0 58.422 40.639'height=40.639px id=Layer_1 version=1.1 viewBox='0 0 58.422 40.639'width=58.422px x=0px xml:space=preserve xmlns=http://www.w3.org/2000/svg xmlns:xlink=http://www.w3.org/1999/xlink y=0px><g><path d='M58.203,37.754l0.007-0.004L42.09,9.935l-0.001,0.001c-0.356-0.543-0.969-0.902-1.667-0.902";
-  ptr +="c-0.655,0-1.231,0.32-1.595,0.808l-0.011-0.007l-0.039,0.067c-0.021,0.03-0.035,0.063-0.054,0.094L22.78,37.692l0.008,0.004";
-  ptr +="c-0.149,0.28-0.242,0.594-0.242,0.934c0,1.102,0.894,1.995,1.994,1.995v0.015h31.888c1.101,0,1.994-0.893,1.994-1.994";
-  ptr +="C58.422,38.323,58.339,38.024,58.203,37.754z'fill=#955BA5 /><path d='M19.704,38.674l-0.013-0.004l13.544-23.522L25.13,1.156l-0.002,0.001C24.671,0.459,23.885,0,22.985,0";
-  ptr +="c-0.84,0-1.582,0.41-2.051,1.038l-0.016-0.01L20.87,1.114c-0.025,0.039-0.046,0.082-0.068,0.124L0.299,36.851l0.013,0.004";
-  ptr +="C0.117,37.215,0,37.62,0,38.059c0,1.412,1.147,2.565,2.565,2.565v0.015h16.989c-0.091-0.256-0.149-0.526-0.149-0.813";
-  ptr +="C19.405,39.407,19.518,39.019,19.704,38.674z'fill=#955BA5 /></g></svg>";
-  ptr +="</div>"; 
-  ptr +="<div class='side-by-side text'>Altitude</div>";
-  ptr +="<div class='side-by-side reading'>";
-  ptr +=(int)altitude;
-  ptr +="<span class='superscript'>m</span></div>";
-  ptr +="</div>";
-*/
   
   ptr +="</div>";
   ptr +="</body>";
