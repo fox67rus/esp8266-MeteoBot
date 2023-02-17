@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 
 from src.meteo_bot.access_config import TOKEN
-from extensions import get_weather_data
+from extensions import get_weather_data, get_weather_sensitivity
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -16,9 +16,11 @@ def command_start(message: telebot.types.Message):
 
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     btn1 = types.KeyboardButton('🌡️ Данные с датчика')
-    btn2 = types.KeyboardButton('🌐 Данные из Интернета')
+    btn2 = types.KeyboardButton('😵 Медицинский прогноз')
+    # btn3 = types.KeyboardButton('🌐 Данные из Интернета')
+
     markup.add(btn1, btn2)
-    bot.send_message(message.from_user.id, "🌡️ Данные с датчика / 🌐 Данные из Интернета", reply_markup=markup)
+    # bot.send_message(message.from_user.id, "🌡️ Данные с датчика / 🌐 Данные из Интернета", reply_markup=markup)
 
 
 @bot.message_handler(commands=['help'])
@@ -46,6 +48,22 @@ def command_temp(message: telebot.types.Message):
 def text_message(message: telebot.types.Message):
     if message.text == '🌡️ Данные с датчика':
         pass
+    elif message.text == '😵 Медицинский прогноз':
+        bot.send_message(message.chat.id, 'Отправляю запрос на сервер...')
+        weather_health_data = get_weather_sensitivity()
+        if weather_health_data:
+            weather_heart_now = weather_health_data[0]
+            weather_magnet_now = weather_health_data[1]
+            weather_heart_soon = weather_health_data[2]
+            weather_magnet_soon = weather_health_data[3]
+
+            text = f'Сейчас:\n{weather_heart_now}. \n' \
+                   f'{weather_magnet_now}\n\n' \
+                   f'Ожидается:\n{weather_heart_soon} \n' \
+                   f'{weather_magnet_soon}'
+
+            bot.send_message(message.from_user.id, text, parse_mode='Markdown')
+
     elif message.text == '🌐 Данные из Интернета':
         bot.send_message(message.from_user.id, 'Подробная погода по ' +
                          '[ссылке](https://m.meteonova.ru/med/20429-pogoda-Karmanovo.htm)', parse_mode='Markdown')
