@@ -3,6 +3,7 @@ from telebot import types
 
 from src.meteo_bot.access_config import TOKEN
 from extensions import prepare_message, get_weather_sensitivity, get_weather_data
+from configs import WIND_DIRECTION, WEATHER_DESCRIPTION
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -25,7 +26,8 @@ def command_start(message: telebot.types.Message):
 
 @bot.message_handler(commands=['help'])
 def command_help(message: telebot.types.Message):
-    text = f'Список доступных команд:\n' \
+    text = f'Нажмите на кнопку для получения интересующей информации.\n' \
+           f'Список доступных команд:\n' \
            f'Введите команду /temp для вывода данных с датчика.\n'
     bot.send_message(message.chat.id, text)
 
@@ -63,8 +65,7 @@ def text_message(message: telebot.types.Message):
 
     elif message.text == '🌐 Данные из Интернета':
         weather_data = get_weather_data()
-
-        url = weather_data['info']['url']
+        # url = weather_data['info']['url']
 
         fact = weather_data['fact']
         print(fact)
@@ -73,9 +74,10 @@ def text_message(message: telebot.types.Message):
 
         text = f'Температура: {fact["temp"]} °C.\n' \
                f'Но одеваться нужно на {fact["feels_like"]} °C.\n' \
+               f'За окном {WEATHER_DESCRIPTION[fact["condition"]]}.\n\n' \
                f'Влажность: {fact["humidity"]} %.\n' \
                f'Давление: {fact["pressure_mm"]} мм рт. ст.\n' \
-               f'Ветер дует с {fact["wind_dir"]} со скоростью {fact["wind_speed"]} м/с. ' \
+               f'Ветер дует {WIND_DIRECTION[fact["wind_dir"]]} со скоростью {fact["wind_speed"]} м/с. ' \
                f'Порывы до {fact["wind_gust"]} м/с.\n'
 
         bot.send_message(message.from_user.id, text, parse_mode='Markdown')
