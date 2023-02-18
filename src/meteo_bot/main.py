@@ -2,7 +2,7 @@ import telebot
 from telebot import types
 
 from src.meteo_bot.access_config import TOKEN
-from extensions import prepare_message, get_weather_sensitivity
+from extensions import prepare_message, get_weather_sensitivity, get_weather_data
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -62,8 +62,26 @@ def text_message(message: telebot.types.Message):
         bot.send_message(message.from_user.id, text, parse_mode='Markdown')
 
     elif message.text == '🌐 Данные из Интернета':
-        bot.send_message(message.from_user.id, 'Подробная погода по ' +
-                         '[ссылке](https://m.meteonova.ru/med/20429-pogoda-Karmanovo.htm)', parse_mode='Markdown')
+        weather_data = get_weather_data()
+
+        url = weather_data['info']['url']
+
+        fact = weather_data['fact']
+        print(fact)
+        forecast = weather_data['forecast']
+        print(forecast)
+
+        text = f'Температура: {fact["temp"]} °C.\n' \
+               f'Но одеваться нужно на {fact["feels_like"]} °C.\n' \
+               f'Влажность: {fact["humidity"]} %.\n' \
+               f'Давление: {fact["pressure_mm"]} мм рт. ст.\n' \
+               f'Ветер дует с {fact["wind_dir"]} со скоростью {fact["wind_speed"]} м/с. ' \
+               f'Порывы до {fact["wind_gust"]} м/с.\n'
+
+        bot.send_message(message.from_user.id, text, parse_mode='Markdown')
+
+        # bot.send_message(message.from_user.id, 'Подробная погода по ' +
+        #                  f'[ссылке]({url})', parse_mode='Markdown')
 
     else:
         bot.send_message(message.from_user.id, '\nВведите /help для вывода доступных команд')

@@ -1,8 +1,9 @@
 import requests
 import lxml.html
+import json
 from bs4 import BeautifulSoup
 
-from src.meteo_bot.access_config import ip
+from src.meteo_bot.access_config import ip, coordinates, API_key
 from exceptions import ConnectionException
 
 
@@ -19,7 +20,7 @@ def prepare_text_to_print(incoming_list):
     return new_text
 
 
-def get_weather_data():
+def get_local_weather_data():
     try:
         html = requests.get(ip).content
     except Exception:
@@ -36,7 +37,7 @@ def get_weather_data():
 
 
 def prepare_message():
-    weather_data = get_weather_data()
+    weather_data = get_local_weather_data()
     if weather_data:
         temperature = weather_data[0]
         humidity = weather_data[1]
@@ -45,6 +46,28 @@ def prepare_message():
                f'Влажность: {humidity} %.\n' \
                f'Давление: {pressure} мм рт. ст.\n'
         return text
+
+
+def get_weather_data():
+    url = f'https://api.weather.yandex.ru/v2/informers?lat=' \
+          f'{coordinates[0]}&lon={coordinates[1]}'
+    headers = {'X-Yandex-API-Key': API_key}
+
+    r = requests.get(url, headers=headers)
+    if r.status_code == 200:
+        weather_data = json.loads(r.text)
+        # info = weather_data['info']['url']
+        # print(info)
+        # fact = weather_data['fact']
+        # print(fact)
+        #
+        # forecast = weather_data['forecast']
+        # print(forecast)
+
+    else:
+        weather_data = None
+
+    return weather_data
 
 
 def get_weather_sensitivity():
@@ -63,7 +86,8 @@ def get_weather_sensitivity():
 
 
 if __name__ == '__main__':
-    for data in get_weather_data():
+    for data in get_local_weather_data():
         print(data)
 
     get_weather_sensitivity()
+    get_weather_data()
