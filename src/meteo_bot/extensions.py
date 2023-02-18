@@ -57,10 +57,8 @@ def get_weather_sensitivity():
         health_status = []
         soup = BeautifulSoup(page, 'lxml')
         img_css = soup.select('tr.display > td.temper > img', limit=4)
-        print(len(img_css))
         for img in img_css:
             health_status.append(img.get('title'))
-        print(health_status)
         return health_status
 
 
