@@ -1,8 +1,9 @@
 import telebot
 from telebot import types
+from random import choice
 
 from extensions import TOKEN, get_local_weather_data, get_weather_sensitivity, get_weather_from_yandex
-from configs import WIND_DIRECTION, WEATHER_DESCRIPTION
+from configs import WIND_DIRECTION, WEATHER_DESCRIPTION, weather_facts
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -35,6 +36,13 @@ def command_help(message: telebot.types.Message):
 def command_temp(message: telebot.types.Message):
     bot.send_message(message.chat.id, 'Получаем данные с датчика...')
     text = get_local_weather_data()
+    bot.send_message(message.chat.id, text)
+
+
+@bot.message_handler(commands=['fact'])
+def command_fact(message: telebot.types.Message):
+    bot.send_message(message.chat.id, 'А вы знали, что... \n')
+    text = choice(weather_facts)
     bot.send_message(message.chat.id, text)
 
 
