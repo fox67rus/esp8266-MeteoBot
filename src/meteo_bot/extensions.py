@@ -1,23 +1,10 @@
 import requests
-import lxml.html
+# import lxml.html
 import json
 from bs4 import BeautifulSoup
 
 from access_config import *
 from exceptions import ConnectionException
-
-
-def prepare_text_to_print(incoming_list):
-    new_text = incoming_list[0]
-
-    new_text = new_text.replace("\r", "")
-    new_text = new_text.replace("\n", "")
-    new_text = new_text.replace("%", "")
-    new_text = new_text.replace("°", "")
-    new_text = new_text.replace("мм рт. ст.", "")
-    new_text = new_text.strip()
-
-    return new_text
 
 
 def get_local_weather_data(ip=esp_ip):
@@ -26,13 +13,12 @@ def get_local_weather_data(ip=esp_ip):
     except Exception:
         raise ConnectionException('Ошибка подключения к датчику.')
     else:
-        tree = lxml.html.document_fromstring(html)
-        temp = prepare_text_to_print(tree.xpath('//*[@id="temp"]/text()'))
-        humi = prepare_text_to_print(tree.xpath('//*[@id="humi"]/text()'))
-        press = prepare_text_to_print(tree.xpath('//*[@id="press"]/text()'))
+        soup = BeautifulSoup(html, 'lxml')
+        temp = soup.find(id='temp').contents[0]
+        humi = soup.find(id='humi').contents[0]
+        press = soup.find(id='press').contents[0]
 
         data_list = [temp, humi, press]
-
         return data_list
 
 
@@ -82,4 +68,10 @@ if __name__ == '__main__':
         print(data)
 
     get_weather_sensitivity()
-    get_weather_from_yandex()
+
+    weather_data = get_weather_from_yandex()
+
+    fact = weather_data['fact']
+    print(fact)
+    forecast = weather_data['forecast']
+    print(forecast)
