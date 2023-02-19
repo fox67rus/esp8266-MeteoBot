@@ -50,18 +50,16 @@ def get_weather_sensitivity():
         img_css = soup.select('tr.display > td.temper > img', limit=4)
         for img in img_css:
             health_status.append(img.get('title'))
-        return health_status
+
+        text = f'Сейчас:\n{health_status[0]}.\n' \
+               f'{health_status[1]}\n\n' \
+               f'Ожидается в ближайшие 6 часов:\n{health_status[2]}\n' \
+               f'{health_status[3]}'
+
+    return text
 
 
 if __name__ == '__main__':
-    for data in get_local_weather_data():
-        print(data)
-
-    get_weather_sensitivity()
-
-    weather_yandex = get_weather_from_yandex()
-
-    fact = weather_yandex['fact']
-    print(fact)
-    forecast = weather_yandex['forecast']
-    print(forecast)
+    print(f'{get_local_weather_data()}')
+    print(f'{get_weather_sensitivity()=}')
+    print(f'{get_weather_from_yandex()=}')
