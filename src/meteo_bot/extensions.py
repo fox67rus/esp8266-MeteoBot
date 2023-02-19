@@ -3,7 +3,7 @@ import lxml.html
 import json
 from bs4 import BeautifulSoup
 
-from src.meteo_bot.access_config import ip, coordinates, API_key
+from access_config import *
 from exceptions import ConnectionException
 
 
@@ -20,7 +20,7 @@ def prepare_text_to_print(incoming_list):
     return new_text
 
 
-def get_local_weather_data():
+def get_local_weather_data(ip=esp_ip):
     try:
         html = requests.get(ip).content
     except Exception:
@@ -48,22 +48,14 @@ def prepare_message():
         return text
 
 
-def get_weather_data():
+def get_weather_from_yandex(latitude=coordinates[0], longitude=coordinates[1], API_key=yandex_API_Key):
     url = f'https://api.weather.yandex.ru/v2/informers?lat=' \
-          f'{coordinates[0]}&lon={coordinates[1]}'
+          f'{latitude}&lon={longitude}'
     headers = {'X-Yandex-API-Key': API_key}
 
     r = requests.get(url, headers=headers)
     if r.status_code == 200:
         weather_data = json.loads(r.text)
-        # info = weather_data['info']['url']
-        # print(info)
-        # fact = weather_data['fact']
-        # print(fact)
-        #
-        # forecast = weather_data['forecast']
-        # print(forecast)
-
     else:
         weather_data = None
 
@@ -90,4 +82,4 @@ if __name__ == '__main__':
         print(data)
 
     get_weather_sensitivity()
-    get_weather_data()
+    get_weather_from_yandex()

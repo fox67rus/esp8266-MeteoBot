@@ -1,8 +1,8 @@
 import telebot
 from telebot import types
 
-from src.meteo_bot.access_config import TOKEN
-from extensions import prepare_message, get_weather_sensitivity, get_weather_data
+from access_config import TOKEN
+from extensions import prepare_message, get_weather_sensitivity, get_weather_from_yandex
 from configs import WIND_DIRECTION, WEATHER_DESCRIPTION
 
 bot = telebot.TeleBot(TOKEN)
@@ -64,7 +64,7 @@ def text_message(message: telebot.types.Message):
         bot.send_message(message.from_user.id, text, parse_mode='Markdown')
 
     elif message.text == '🌐 Данные из Интернета':
-        weather_data = get_weather_data()
+        weather_data = get_weather_from_yandex()
         # url = weather_data['info']['url']
 
         fact = weather_data['fact']
