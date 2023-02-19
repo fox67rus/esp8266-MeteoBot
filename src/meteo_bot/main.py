@@ -1,7 +1,7 @@
 import telebot
 from telebot import types
 
-from extensions import *
+from extensions import TOKEN, get_local_weather_data, get_weather_sensitivity, get_weather_from_yandex
 from configs import WIND_DIRECTION, WEATHER_DESCRIPTION
 
 bot = telebot.TeleBot(TOKEN)
@@ -51,11 +51,7 @@ def text_message(message: telebot.types.Message):
 
     elif message.text == '🌐 Данные из Интернета':
         weather_data = get_weather_from_yandex()
-        # url = weather_data['info']['url']
-
         fact = weather_data['fact']
-        # forecast = weather_data['forecast']
-
         text = f'Температура: {fact["temp"]} °C.\n' \
                f'Но одеваться нужно на {fact["feels_like"]} °C.\n' \
                f'За окном {WEATHER_DESCRIPTION[fact["condition"]]}.\n\n' \
@@ -65,9 +61,6 @@ def text_message(message: telebot.types.Message):
                f'Порывы до {fact["wind_gust"]} м/с.\n'
 
         bot.send_message(message.from_user.id, text, parse_mode='Markdown')
-
-        # bot.send_message(message.from_user.id, 'Подробная погода по ' +
-        #                  f'[ссылке]({url})', parse_mode='Markdown')
 
     else:
         bot.send_message(message.from_user.id, '\nВведите /help для вывода доступных команд')
