@@ -14,20 +14,10 @@ def get_local_weather_data(ip=esp_ip):
         raise ConnectionException('Ошибка подключения к датчику.')
     else:
         soup = BeautifulSoup(html, 'lxml')
-        temp = soup.find(id='temp').contents[0]
-        humi = soup.find(id='humi').contents[0]
-        press = soup.find(id='press').contents[0]
+        temperature = soup.select_one('#temp').text
+        humidity = soup.find(id='humi').contents[0]
+        pressure = soup.find(id='press').contents[0]
 
-        data_list = [temp, humi, press]
-        return data_list
-
-
-def prepare_message():
-    weather_data = get_local_weather_data()
-    if weather_data:
-        temperature = weather_data[0]
-        humidity = weather_data[1]
-        pressure = weather_data[2]
         text = f'Температура: {temperature} °C.\n' \
                f'Влажность: {humidity} %.\n' \
                f'Давление: {pressure} мм рт. ст.\n'
@@ -69,9 +59,9 @@ if __name__ == '__main__':
 
     get_weather_sensitivity()
 
-    weather_data = get_weather_from_yandex()
+    weather_yandex = get_weather_from_yandex()
 
-    fact = weather_data['fact']
+    fact = weather_yandex['fact']
     print(fact)
-    forecast = weather_data['forecast']
+    forecast = weather_yandex['forecast']
     print(forecast)
