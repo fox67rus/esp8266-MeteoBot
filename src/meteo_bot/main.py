@@ -46,20 +46,7 @@ def text_message(message: telebot.types.Message):
         bot.send_message(message.chat.id, text)
 
     elif message.text == '😵 Медицинский прогноз':
-        weather_health_data = get_weather_sensitivity()
-        if weather_health_data:
-            weather_heart_now = weather_health_data[0]
-            weather_magnet_now = weather_health_data[1]
-            weather_heart_soon = weather_health_data[2]
-            weather_magnet_soon = weather_health_data[3]
-
-            text = f'Сейчас:\n{weather_heart_now}. \n' \
-                   f'{weather_magnet_now}\n\n' \
-                   f'Ожидается в ближайшие 6 часов:\n{weather_heart_soon} \n' \
-                   f'{weather_magnet_soon}'
-        else:
-            text = 'Не удалось получить данные'
-
+        text = get_weather_sensitivity()
         bot.send_message(message.from_user.id, text, parse_mode='Markdown')
 
     elif message.text == '🌐 Данные из Интернета':
