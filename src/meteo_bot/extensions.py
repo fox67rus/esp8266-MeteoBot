@@ -18,7 +18,7 @@ def get_local_weather_data(ip=esp_ip):
         humidity = soup.find(id='humi').contents[0]
         pressure = soup.find(id='press').contents[0]
 
-        text = f'Температура: {temperature} °C.\n' \
+        text = f'Температура: {temperature}.\n' \
                f'Влажность: {humidity} %.\n' \
                f'Давление: {pressure} мм рт. ст.\n'
         return text
@@ -29,11 +29,12 @@ def get_weather_from_yandex(latitude=coordinates[0], longitude=coordinates[1], A
           f'{latitude}&lon={longitude}'
     headers = {'X-Yandex-API-Key': API_key}
 
-    r = requests.get(url, headers=headers)
-    if r.status_code == 200:
-        weather_data = json.loads(r.text)
+    try:
+        r = requests.get(url, headers=headers)
+    except Exception as e:
+        raise ConnectionException('Ошибка получения данных с Яндекс')
     else:
-        weather_data = None
+        weather_data = json.loads(r.text)
 
     return weather_data
 
