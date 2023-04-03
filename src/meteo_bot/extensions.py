@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 
 from access_config import *
 from exceptions import ConnectionException
-from configs import MOON_CODE
 
 
 def get_local_weather_data(ip=esp_ip):
@@ -76,12 +75,12 @@ def get_agro_forecast():
         table_moon_data = soup.findAll('td')
 
         for td in table_moon_data:
-            div = td.findAll(['a', 'div'])
+            div = td.findAll(['a', 'div', 'span'])
             for moon_data in div:
-                if moon_data:
+                if moon_data.text:
                     moon_status.append(moon_data.text)
 
-        print(f'{moon_status}')
+        # print(f'{moon_status=}')
 
         soon_moon_phase = []
         soon_moon_date = []
@@ -93,13 +92,19 @@ def get_agro_forecast():
             soon_moon_date.append(soon_date.get_text())
 
         soon_moon_dict = dict(zip(soon_moon_phase, soon_moon_date))
-        print(f'{soon_moon_dict=}')
+        # print(f'{soon_moon_dict=}')
+
+        text = f'Фаза луны - {moon_status[5]}. {moon_status[3]} {moon_status[4]}. Освещенность - {moon_status[2]}\n\n' \
+               'Ближайшие фазы Луны:\n'
+
+        for key, value in soon_moon_dict.items():
+            text += '{1}: {0}'.format(value, key) + '\n'
+
+        return text
 
 
 if __name__ == '__main__':
     # print(f'{get_local_weather_data()}')
     # print(f'{get_weather_sensitivity()=}')
     # print(f'{get_weather_from_yandex()=}')
-    # print(f'{get_agro_forecast=}')
-    get_agro_forecast()
-
+    print(get_agro_forecast())
