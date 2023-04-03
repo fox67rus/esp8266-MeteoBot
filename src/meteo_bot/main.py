@@ -11,6 +11,8 @@ bot = telebot.TeleBot(TOKEN)
 # Обработка команд
 @bot.message_handler(commands=['start'])
 def command_start(message: telebot.types.Message):
+    # print(f'{message.chat.username}'+message.text)
+
     text = f'Добрейшего времени суток вам, {message.chat.first_name}!\n\n'
     bot.send_message(message.chat.id, text)
 
@@ -26,6 +28,9 @@ def command_start(message: telebot.types.Message):
 
 @bot.message_handler(commands=['help'])
 def command_help(message: telebot.types.Message):
+
+    # print(f'{message.chat.username}'+message.text)
+
     text = f'Нажмите на кнопку для получения интересующей информации.\n' \
            f'Список доступных команд:\n' \
            f'Введите команду /temp для вывода данных с датчика.\n'
@@ -41,6 +46,9 @@ def command_temp(message: telebot.types.Message):
 
 @bot.message_handler(commands=['fact'])
 def command_fact(message: telebot.types.Message):
+
+    # print(f'{message.chat.username}' + message.text)
+
     bot.send_message(message.chat.id, 'А вы знали, что... \n')
     text = choice(weather_facts)
     bot.send_message(message.chat.id, text)
@@ -48,6 +56,8 @@ def command_fact(message: telebot.types.Message):
 
 @bot.message_handler(content_types=['text', ])
 def text_message(message: telebot.types.Message):
+    # print(f'{message.chat.username}' + message.text)
+
     if message.text == '🌡️ Данные с датчика':
         bot.send_message(message.chat.id, 'Получаем данные с датчика...')
         text = get_local_weather_data()
