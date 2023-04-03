@@ -80,7 +80,7 @@ def get_agro_forecast():
                 if moon_data.text:
                     moon_status.append(moon_data.text)
 
-        # print(f'{moon_status=}')
+        print(f'{moon_status=}')
 
         soon_moon_phase = []
         soon_moon_date = []
@@ -94,8 +94,9 @@ def get_agro_forecast():
         soon_moon_dict = dict(zip(soon_moon_phase, soon_moon_date))
         # print(f'{soon_moon_dict=}')
 
-        text = f'Фаза луны - {moon_status[5]}. {moon_status[3]} {moon_status[4]}. Освещенность - {moon_status[2]}\n\n' \
-               'Ближайшие фазы Луны:\n'
+        text = f'Фаза луны - {moon_status[5]} {moon_status[7]}. \n{moon_status[3]} {moon_status[4]}. ' \
+               f'Освещенность - {moon_status[2]}\n\n' \
+               f'Ближайшие фазы Луны:\n'
 
         for key, value in soon_moon_dict.items():
             text += '{1}: {0}'.format(value, key) + '\n'
@@ -107,4 +108,5 @@ if __name__ == '__main__':
     # print(f'{get_local_weather_data()}')
     # print(f'{get_weather_sensitivity()=}')
     # print(f'{get_weather_from_yandex()=}')
+    get_agro_forecast()
     print(get_agro_forecast())
