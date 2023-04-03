@@ -80,7 +80,7 @@ def get_agro_forecast():
                 if moon_data.text:
                     moon_status.append(moon_data.text)
 
-        print(f'{moon_status=}')
+        # print(f'{moon_status=}')
 
         soon_moon_phase = []
         soon_moon_date = []
@@ -99,7 +99,7 @@ def get_agro_forecast():
                f'Ближайшие фазы Луны:\n'
 
         for key, value in soon_moon_dict.items():
-            text += '{1}: {0}'.format(value, key) + '\n'
+            text += '{1} ({0})'.format(value, key) + '\n'
 
         return text
 
