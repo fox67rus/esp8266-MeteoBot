@@ -85,10 +85,10 @@ def get_agro_forecast():
         soon_moon_phase = []
         soon_moon_date = []
 
-        for soon_phase in soup.select('.moon-phase-phases-title'):
+        for soon_phase in soup.select('.moon-phase-phases-title', limit=4):
             soon_moon_phase.append(soon_phase.get_text())
 
-        for soon_date in soup.select('.moon-phase-phases-title ~ div'):
+        for soon_date in soup.select('.moon-phase-phases-title ~ div', limit=4):
             soon_moon_date.append(soon_date.get_text())
 
         soon_moon_dict = dict(zip(soon_moon_phase, soon_moon_date))
