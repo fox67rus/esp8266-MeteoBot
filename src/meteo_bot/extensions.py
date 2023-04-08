@@ -1,3 +1,5 @@
+import re
+
 import requests
 # import lxml.html
 import json
@@ -52,10 +54,24 @@ def get_weather_sensitivity():
         for img in img_css:
             health_status.append(img.get('title'))
 
+        url = 'https://my-calend.ru/magnitnye-buri'
+        try:
+            page = requests.get(url).content
+        except Exception:
+            raise ConnectionException('Ошибка получения данных с сайта: ' + url)
+        else:
+            magnetic_storms_forecast = ''
+            soup = BeautifulSoup(page, 'lxml')
+
+            for p in soup.select('h2 ~ p')[2]:
+                magnetic_storms_forecast += p.get_text()
+
         text = f'Сейчас:\n{health_status[0]}.\n' \
                f'{health_status[1]}\n\n' \
                f'Ожидается в ближайшие 6 часов:\n{health_status[2]}\n' \
-               f'{health_status[3]}'
+               f'{health_status[3]}\n' \
+               f'Прогноз \n' \
+               f'{magnetic_storms_forecast}'
 
     return text
 
@@ -106,7 +122,7 @@ def get_agro_forecast():
 
 if __name__ == '__main__':
     # print(f'{get_local_weather_data()}')
-    # print(f'{get_weather_sensitivity()=}')
+    print(f'{get_weather_sensitivity()=}')
     # print(f'{get_weather_from_yandex()=}')
-    get_agro_forecast()
-    print(get_agro_forecast())
+    # get_agro_forecast()
+    # print(get_agro_forecast())
