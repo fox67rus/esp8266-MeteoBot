@@ -1,5 +1,3 @@
-import re
-
 import requests
 # import lxml.html
 import json
@@ -70,8 +68,8 @@ def get_weather_sensitivity():
                f'{health_status[1]}\n\n' \
                f'Ожидается в ближайшие 6 часов:\n{health_status[2]}\n' \
                f'{health_status[3]}\n' \
-               f'Прогноз \n' \
-               f'{magnetic_storms_forecast}'
+               f'\n\n' \
+               f'😵 {magnetic_storms_forecast}'
 
     return text
 
