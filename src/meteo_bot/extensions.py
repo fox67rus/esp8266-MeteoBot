@@ -74,9 +74,9 @@ def get_weather_sensitivity():
     return text
 
 
-def get_moon_forecast():
+def get_moon_forecast() -> str:
     """
-    Прогноз для садоводов
+    Прогноз фаз луны
     """
     url = 'https://my-calend.ru/moon-phase'
     try:
@@ -116,6 +116,27 @@ def get_moon_forecast():
             text += '{1} ({0})'.format(value, key) + '\n'
 
         return text
+
+
+def get_agro_forecast() -> str:
+    """
+    Получаем прогноз благоприятных дней для посадок
+    """
+    url = 'https://orton.ru/kalendar-ogorodnika/'
+    try:
+        page = requests.get(url).content
+    except requests.exceptions.ConnectTimeout:
+        print(f'Ресурс {url} недоступен')
+    else:
+        soup = BeautifulSoup(page, 'lxml')
+        data = []
+        table = soup.find('table', attrs={'class': 'table-culture table-culture_green'})
+        table_body = table.find('tbody')
+        rows = table_body.find_all('tr')
+        for row in rows:
+            cols = row.find_all('td')
+            cols = [ele.text.strip() for ele in cols]
+            data.append([ele for ele in cols if ele])  # Get rid of empty values
 
 
 if __name__ == '__main__':
