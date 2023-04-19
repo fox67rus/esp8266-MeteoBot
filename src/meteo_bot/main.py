@@ -3,7 +3,7 @@ from telebot import types
 from random import choice
 
 from extensions import TOKEN, get_local_weather_data, get_weather_sensitivity, get_weather_from_yandex, \
-    get_agro_forecast
+    get_moon_forecast
 from configs import WIND_DIRECTION, WEATHER_DESCRIPTION, weather_facts
 
 bot = telebot.TeleBot(TOKEN)
@@ -67,7 +67,7 @@ def text_message(message: telebot.types.Message):
         text = get_weather_sensitivity()
         bot.send_message(message.from_user.id, text, parse_mode='Markdown')
     elif message.text == '🌜 Фазы Луны':
-        text = get_agro_forecast()
+        text = get_moon_forecast()
         bot.send_message(message.from_user.id, text, parse_mode='Markdown')
     elif message.text == '🌐 Данные из Интернета':
         weather_data = get_weather_from_yandex()

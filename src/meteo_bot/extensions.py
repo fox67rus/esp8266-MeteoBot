@@ -74,7 +74,7 @@ def get_weather_sensitivity():
     return text
 
 
-def get_agro_forecast():
+def get_moon_forecast():
     """
     Прогноз для садоводов
     """
@@ -120,7 +120,7 @@ def get_agro_forecast():
 
 if __name__ == '__main__':
     # print(f'{get_local_weather_data()}')
-    print(f'{get_weather_sensitivity()=}')
+    # print(f'{get_weather_sensitivity()=}')
     # print(f'{get_weather_from_yandex()=}')
     # get_agro_forecast()
-    # print(get_agro_forecast())
+    print(get_moon_forecast())
